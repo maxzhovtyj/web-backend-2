@@ -149,3 +149,10 @@ from django.contrib.admin.views.decorators import staff_member_required
 @staff_member_required
 def online_users_view(request):
     return render(request, 'main/online_users.html')
+
+from django.shortcuts import render
+from .models import Todo
+
+def public_todo_list(request):
+    todos = Todo.objects.all().order_by('-created_at')
+    return render(request, 'main/public_todos.html', {'todos': todos})

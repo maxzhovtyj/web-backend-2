@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-xl">
+    <h1 class="text-2xl font-bold mb-4 text-center">Публічні завдання</h1>
+    <ul id="todo-list" class="space-y-2">
+      {% for todo in todos %}
+        <li id="todo-{{ todo.id }}" class="border p-3 rounded bg-gray-50">
+          <span>
+            <strong>{{ todo.title }}</strong> — {{ todo.user.username }} — {% if todo.completed %}✅{% else %}⏳{% endif %}
+          </span>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<script>
+const socket = new WebSocket("ws://" + window.location.host + "/ws/todos/");
+
+socket.onmessage = function(e) {
+  const data = JSON.parse(e.data);
+  const list = document.getElementById("todo-list");
+
+  if (data.action === "created") {
+    const todo = data.todo;
+    const el = document.createElement("li");
+    el.id = "todo-" + todo.id;
+    el.className = "border p-3 rounded bg-gray-50";
+    el.innerHTML = `<strong>${todo.title}</strong> — ${todo.user.username} — ${todo.completed ? "✅" : "⏳"}`;
+    list.prepend(el);
+  }
+
+  if (data.action === "updated") {
+    const todo = data.todo;
+    const el = document.getElementById("todo-" + todo.id);
+    if (el) el.innerHTML = `<strong>${todo.title}</strong> — ${todo.user.username} — ${todo.completed ? "✅" : "⏳"}`;
+  }
+
+  if (data.action === "deleted") {
+    const el = document.getElementById("todo-" + data.id);
+    if (el) el.remove();
+  }
+};
+</script>
+{% endblock %}
+

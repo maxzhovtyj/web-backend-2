@@ -28,8 +28,9 @@ urlpatterns += [
     path('todo/complete/<int:pk>/', complete_todo, name='complete_todo'),
 ]
 
-from .views import online_users_view
+from .views import online_users_view, public_todo_list
 
 urlpatterns += [
     path("online-users/", online_users_view, name="online_users"),
+    path('public-todos/', public_todo_list, name='public_todos'),
 ]

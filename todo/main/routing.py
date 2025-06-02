@@ -1,7 +1,8 @@
 from django.urls import path
 from . import consumers
+from django.urls import re_path
 
 websocket_urlpatterns = [
-    # path("ws/todos/", consumers.TodoConsumer.as_asgi()),
+    re_path(r'ws/todos/$', consumers.TodoConsumer.as_asgi()),
     path("ws/online/", consumers.OnlineUserConsumer.as_asgi()),
 ]
