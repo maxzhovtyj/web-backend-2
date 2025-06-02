@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-xl mx-auto mt-10 p-6 bg-white rounded shadow">
+  <h2 class="text-2xl font-bold mb-4">Online Users</h2>
+  <ul id="user-list" class="list-disc pl-6 text-gray-800">
+    <li>Loading...</li>
+  </ul>
+</div>
+
+<script>
+  const socket = new WebSocket("ws://" + window.location.host + "/ws/online/");
+
+  socket.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+    const users = data.online;
+    const list = document.getElementById("user-list");
+    list.innerHTML = "";
+    if (users.length === 0) {
+      list.innerHTML = "<li>No one online</li>";
+    } else {
+      users.forEach(username => {
+        const li = document.createElement("li");
+        li.textContent = username;
+        list.appendChild(li);
+      });
+    }
+  };
+</script>
+{% endblock %}

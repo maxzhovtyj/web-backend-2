@@ -2,6 +2,7 @@ from django.urls import path, include
 from .views import root_view, RegisterView, ProfileView, TodoViewSet, todos
 from rest_framework.routers import DefaultRouter
 from .views import add_todo, delete_todo, complete_todo
+from django.shortcuts import render
 
 router = DefaultRouter()
 router.register(r'todos', TodoViewSet, basename='todo')
@@ -25,4 +26,10 @@ urlpatterns += [
     path('todo/add/', add_todo, name='add_todo'),
     path('todo/delete/<int:pk>/', delete_todo, name='delete_todo'),
     path('todo/complete/<int:pk>/', complete_todo, name='complete_todo'),
+]
+
+from .views import online_users_view
+
+urlpatterns += [
+    path("online-users/", online_users_view, name="online_users"),
 ]

@@ -29,5 +29,11 @@
 {% if debug %}
 {% django_browser_reload_script %}
 {% endif %}
+
+{% if request.user.is_authenticated %}
+  <script>
+    const socket = new WebSocket("ws://" + window.location.host + "/ws/online/");
+  </script>
+  {% endif %}
 </body>
 </html>

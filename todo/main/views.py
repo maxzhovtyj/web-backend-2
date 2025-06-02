@@ -142,3 +142,10 @@ def complete_todo(request, pk):
     todo.completed = True
     todo.save()
     return redirect('home')
+
+from django.shortcuts import render
+from django.contrib.admin.views.decorators import staff_member_required
+
+@staff_member_required
+def online_users_view(request):
+    return render(request, 'main/online_users.html')
